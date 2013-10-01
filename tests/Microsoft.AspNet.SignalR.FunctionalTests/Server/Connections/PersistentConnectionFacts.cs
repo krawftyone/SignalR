@@ -92,7 +92,7 @@ namespace Microsoft.AspNet.SignalR.Tests
 
             private static Task ProcessRequest(MemoryHost host, string transport, string connectionToken)
             {
-                return host.Get("http://foo/echo/connect?transport=" + transport + "&connectionToken=" + connectionToken);
+                return host.Get("/echo/connect?transport=" + transport + "&connectionToken=" + connectionToken, r => { }, isLongRunning: true);
             }
 
             [Fact]
@@ -112,7 +112,7 @@ namespace Microsoft.AspNet.SignalR.Tests
                         connectionContext = configuration.Resolver.Resolve<IConnectionManager>().GetConnectionContext<BroadcastConnection>();
                     });
 
-                    var connection1 = new Client.Connection("http://foo/echo");
+                    var connection1 = new Client.Connection("http://localhost/echo");
 
                     using (connection1)
                     {

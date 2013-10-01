@@ -119,7 +119,7 @@ namespace Microsoft.AspNet.SignalR.Tests
                     Dispose();
                     _server = new MemoryHost();
                     // Ensure that all servers have the same instance name so tokens can be successfully unprotected
-                    _server.InstanceName = "ServerRestarter";
+                    //_server.InstanceName = "ServerRestarter";
                     _server.Configure(_startup);
                 }
             }

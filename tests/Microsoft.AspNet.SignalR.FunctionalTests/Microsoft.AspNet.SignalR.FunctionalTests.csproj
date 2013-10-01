@@ -115,10 +115,6 @@
       <Project>{1b9a82c4-bca1-4834-a33e-226f17be070b}</Project>
       <Name>Microsoft.AspNet.SignalR.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.AspNet.SignalR.Hosting.Memory\Microsoft.AspNet.SignalR.Hosting.Memory.csproj">
-      <Project>{055f2118-fe29-4219-a28a-3d6f0889652e}</Project>
-      <Name>Microsoft.AspNet.SignalR.Hosting.Memory</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\src\Common\Microsoft.AspNet.SignalR.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
