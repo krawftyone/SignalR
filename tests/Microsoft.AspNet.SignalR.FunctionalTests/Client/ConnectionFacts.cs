@@ -88,8 +88,8 @@ namespace Microsoft.AspNet.SignalR.Tests
 
         [Theory]
         [InlineData(HostType.IISExpress, TransportType.LongPolling)]
-        [InlineData(HostType.IISExpress, TransportType.ServerSentEvents)]
-        [InlineData(HostType.IISExpress, TransportType.Websockets)]
+        //[InlineData(HostType.IISExpress, TransportType.ServerSentEvents)]
+        //[InlineData(HostType.IISExpress, TransportType.Websockets)]
         public void ReconnectRequestPathEndsInReconnect(HostType hostType, TransportType transportType)
         {
             using (var host = CreateHost(hostType, transportType))
@@ -104,6 +104,11 @@ namespace Microsoft.AspNet.SignalR.Tests
 
                 var connection = CreateConnection(host, "/force-lp-reconnect/examine-reconnect");
 
+                connection.Reconnecting += () =>
+                 {
+                     receivedMessage = false;
+                 };
+
                 connection.Received += (reconnectEndsPath) =>
                 {
                     if (!receivedMessage)
@@ -114,6 +119,8 @@ namespace Microsoft.AspNet.SignalR.Tests
                 };
 
                 connection.Start(host.Transport).Wait();
+
+                //int a = 4;
 
                 // Wait for reconnect
                 Assert.True(tcs.Task.Wait(TimeSpan.FromSeconds(10)));

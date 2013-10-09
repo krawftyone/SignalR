@@ -311,10 +311,10 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
 
             [Theory]
             [InlineData(HostType.Memory, TransportType.ServerSentEvents)]
-            [InlineData(HostType.Memory, TransportType.LongPolling)]
+            //[InlineData(HostType.Memory, TransportType.LongPolling)]
             [InlineData(HostType.IISExpress, TransportType.ServerSentEvents)]
             [InlineData(HostType.IISExpress, TransportType.Websockets)]
-            [InlineData(HostType.IISExpress, TransportType.LongPolling)]
+            //[InlineData(HostType.IISExpress, TransportType.LongPolling)]
             public void ClientStaysReconnectedAfterDisconnectTimeout(HostType hostType, TransportType transportType)
             {
                 using (var host = CreateHost(hostType, transportType))
@@ -323,7 +323,7 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
                                     connectionTimeout: 2,
                                     disconnectTimeout: 6);
 
-                    var connection = CreateHubConnection(host, "/force-lp-reconnect");
+                    var connection = CreateHubConnection(host);
                     var reconnectingWh = new ManualResetEventSlim();
                     var reconnectedWh = new ManualResetEventSlim();
 

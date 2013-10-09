@@ -109,7 +109,7 @@
             });
 
             var start = function () {
-                connection.start({ transport: activeTransport, jsonp: isJsonp })
+                connection.start({ transport: 'longPolling', jsonp: isJsonp })
                     .then(function () {
                         $("#stopStart")
                            .prop("disabled", false)
