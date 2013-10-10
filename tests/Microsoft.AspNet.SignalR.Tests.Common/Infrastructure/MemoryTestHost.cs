@@ -10,6 +10,8 @@ using Owin;
 
 namespace Microsoft.AspNet.SignalR.FunctionalTests.Infrastructure
 {
+    using AppFunc = System.Func<System.Collections.Generic.IDictionary<string, object>, System.Threading.Tasks.Task>;
+
     public class MemoryTestHost : ITestHost
     {
         private readonly MemoryHost _host;
@@ -93,9 +95,12 @@ namespace Microsoft.AspNet.SignalR.FunctionalTests.Infrastructure
                     configuration.KeepAlive = TimeSpan.FromSeconds(keepAlive.Value);
                 }
 
+                //ReconnectFailedMiddleware(app);
+
                 app.MapHubs("/signalr2/test", new HubConfiguration());
                 app.MapHubs("/signalr", new HubConfiguration { EnableDetailedErrors = true, Resolver = dr });
-
+                app.MapHubs("/force-lp-reconnect/examine-reconnect", new HubConfiguration());
+    
                 var config = new ConnectionConfiguration
                 {
                     Resolver = dr
@@ -111,6 +116,8 @@ namespace Microsoft.AspNet.SignalR.FunctionalTests.Infrastructure
                 app.MapConnection<SyncErrorConnection>("/sync-error", config);
                 app.MapConnection<AddGroupOnConnectedConnection>("/add-group", config);
                 app.MapConnection<UnusableProtectedConnection>("/protected", config);
+
+                
             });
         }
 
@@ -134,6 +141,25 @@ namespace Microsoft.AspNet.SignalR.FunctionalTests.Infrastructure
         public void Shutdown()
         {
             Dispose();
+        }
+
+        private static void ReconnectFailedMiddleware(IAppBuilder app)
+        {
+            Func<AppFunc, AppFunc> middleware = (next) =>
+            {
+                return env =>
+                {
+                    var path = env["owin.RequestPath"];
+                    if (path.ToString().Contains("poll") && path.ToString().Contains("force-lp-reconnect/examine-reconnect"))
+                    {
+                        env["owin.ResponseStatusCode"] = 500;
+                        return TaskAsyncHelper.Empty;
+                    }
+                    return next(env);
+                };
+            };
+
+            app.Use(middleware);
         }
     }
 }

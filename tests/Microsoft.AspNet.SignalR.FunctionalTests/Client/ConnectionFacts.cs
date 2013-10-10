@@ -105,9 +105,9 @@ namespace Microsoft.AspNet.SignalR.Tests
                 var connection = CreateConnection(host, "/force-lp-reconnect/examine-reconnect");
 
                 connection.Reconnecting += () =>
-                 {
+                {
                      receivedMessage = false;
-                 };
+                };
 
                 connection.Received += (reconnectEndsPath) =>
                 {
@@ -119,8 +119,6 @@ namespace Microsoft.AspNet.SignalR.Tests
                 };
 
                 connection.Start(host.Transport).Wait();
-
-                //int a = 4;
 
                 // Wait for reconnect
                 Assert.True(tcs.Task.Wait(TimeSpan.FromSeconds(10)));
